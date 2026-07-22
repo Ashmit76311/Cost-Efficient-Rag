@@ -2,5 +2,6 @@ data/
 __pycache__/
 *.pyc
 .env
-eval/results/
+eval/results/*.json
+
 *.egg-info/
