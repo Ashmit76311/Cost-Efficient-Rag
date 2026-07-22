@@ -30,7 +30,7 @@ def load_questions():
 def benchmark():
     # grab all vectors from chromadb
     all_data = collection.get(include=["embeddings", "documents", "metadatas"])
-    if not all_data["embeddings"]:
+    if all_data.get("embeddings") is None or len(all_data["embeddings"]) == 0:
         print("No embeddings found. Run ingest.py first.")
         return
 

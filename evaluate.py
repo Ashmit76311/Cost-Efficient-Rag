@@ -6,13 +6,9 @@ from pathlib import Path
 from collections import Counter
 
 import numpy as np
-import google.generativeai as genai
 
 import config
 import retriever
-
-genai.configure(api_key=config.GOOGLE_API_KEY)
-judge_llm = genai.GenerativeModel(config.LLM_MODEL)
 
 
 def load_questions():
@@ -118,10 +114,11 @@ def calc_f1(predicted, gold):
 def llm_judge(prompt):
     """Ask the LLM to rate something 0-1. Returns the float score."""
     try:
-        response = judge_llm.generate_content(prompt)
+        response = retriever.llm_generate(prompt)
         score = float(response.text.strip().split()[0])
         return min(max(score, 0.0), 1.0)
-    except:
+    except Exception as e:
+        print(f"    [judge error] {e}, defaulting to 0.5")
         return 0.5
 
 
@@ -181,11 +178,8 @@ def run_evaluation(k=None):
     for q in questions:
         print(f"  Q{q['id']}: {q['question'][:60]}...")
 
-        # get answer from our RAG pipeline
         filters = q.get("filters")
-        start = time.time()
         result = retriever.answer(q["question"], k=k, filters=filters)
-        latency = time.time() - start
         latencies.append(result["metrics"]["retrieval_latency_ms"])
 
         retrieved_ids = [c["id"] for c in result["chunks"]]
@@ -218,7 +212,6 @@ def run_evaluation(k=None):
 
         if q["type"] == "out_of_scope":
             ans_metrics["refusal_score"] = judge_refusal(result["answer"])
-            # faithfulness should be high if it refuses properly
             ans_metrics["faithfulness"] = ans_metrics["refusal_score"]
             ans_metrics["relevance"] = ans_metrics["refusal_score"]
         else:
@@ -230,9 +223,10 @@ def run_evaluation(k=None):
                 ans_metrics["f1"] = calc_f1(result["answer"], q["gold_answer"])
 
         answer_results.append(ans_metrics)
-        time.sleep(0.5)  # be nice to the API rate limits
 
-    # compute aggregates
+        # be nice to the free tier rate limits
+        time.sleep(4)
+
     summary = compute_summary(retrieval_results, answer_results, latencies, k)
     save_results(retrieval_results, answer_results, summary)
 
@@ -240,14 +234,12 @@ def run_evaluation(k=None):
 
 
 def compute_summary(retrieval_results, answer_results, latencies, k):
-    # retrieval aggregates
     ret_agg = {}
     if retrieval_results:
         for metric in ["hit_rate", "recall_at_k", "mrr", "ndcg_at_k", "context_precision"]:
             values = [r[metric] for r in retrieval_results]
             ret_agg[metric] = round(np.mean(values), 4)
 
-    # answer aggregates
     ans_agg = {}
     faithfulness_scores = [a["faithfulness"] for a in answer_results if "faithfulness" in a]
     relevance_scores = [a["relevance"] for a in answer_results if "relevance" in a]
@@ -263,18 +255,15 @@ def compute_summary(retrieval_results, answer_results, latencies, k):
     if f1_scores:
         ans_agg["avg_f1"] = round(np.mean(f1_scores), 4)
 
-    # out-of-scope refusal
     refusal_scores = [a["refusal_score"] for a in answer_results if "refusal_score" in a]
     if refusal_scores:
         ans_agg["avg_refusal_score"] = round(np.mean(refusal_scores), 4)
 
-    # latency
     latency_agg = {}
     if latencies:
-        latencies_sorted = sorted(latencies)
-        latency_agg["p50_retrieval_ms"] = round(np.percentile(latencies_sorted, 50), 2)
-        latency_agg["p95_retrieval_ms"] = round(np.percentile(latencies_sorted, 95), 2)
-        latency_agg["mean_retrieval_ms"] = round(np.mean(latencies_sorted), 2)
+        latency_agg["p50_retrieval_ms"] = round(np.percentile(latencies, 50), 2)
+        latency_agg["p95_retrieval_ms"] = round(np.percentile(latencies, 95), 2)
+        latency_agg["mean_retrieval_ms"] = round(np.mean(latencies), 2)
 
     total_tokens = sum(a["tokens"]["total_tokens"] for a in answer_results if "tokens" in a)
 
@@ -301,7 +290,6 @@ def save_results(retrieval_results, answer_results, summary):
     with open("eval/results/retrieval_metrics.json", "w") as f:
         json.dump(retrieval_results, f, indent=2)
 
-    # save answers without the full text to keep it readable
     answer_summary = []
     for a in answer_results:
         entry = {k: v for k, v in a.items() if k != "answer"}
@@ -314,7 +302,6 @@ def save_results(retrieval_results, answer_results, summary):
     with open("eval/results/summary.json", "w") as f:
         json.dump(summary, f, indent=2)
 
-    # print summary
     print("\n" + "=" * 60)
     print("EVALUATION SUMMARY")
     print("=" * 60)

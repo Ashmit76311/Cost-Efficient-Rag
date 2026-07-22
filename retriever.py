@@ -3,11 +3,8 @@ import sys
 
 import chromadb
 from sentence_transformers import SentenceTransformer
-import google.generativeai as genai
 
 import config
-
-genai.configure(api_key=config.GOOGLE_API_KEY)
 
 client = chromadb.PersistentClient(path=config.CHROMA_DB_PATH)
 collection = client.get_or_create_collection(
@@ -16,7 +13,53 @@ collection = client.get_or_create_collection(
 )
 
 embedder = SentenceTransformer(config.EMBEDDING_MODEL)
-llm = genai.GenerativeModel(config.LLM_MODEL)
+
+# Setup LLM client based on provider
+if config.LLM_PROVIDER == "groq":
+    from groq import Groq
+    groq_client = Groq(api_key=config.GROQ_API_KEY)
+else:
+    from google import genai
+    genai_client = genai.Client(api_key=config.GOOGLE_API_KEY)
+
+
+class MockResponse:
+    def __init__(self, text, pt, ct, tt):
+        self.text = text
+        self.usage_metadata = type('obj', (object,), {
+            'prompt_token_count': pt,
+            'candidates_token_count': ct,
+            'total_token_count': tt
+        })
+
+def llm_generate(prompt, max_retries=5):
+    """Call the configured LLM with retry + backoff for rate limits."""
+    for attempt in range(max_retries):
+        try:
+            if config.LLM_PROVIDER == "groq":
+                chat_completion = groq_client.chat.completions.create(
+                    messages=[{"role": "user", "content": prompt}],
+                    model=config.LLM_MODEL,
+                )
+                text = chat_completion.choices[0].message.content
+                pt = chat_completion.usage.prompt_tokens
+                ct = chat_completion.usage.completion_tokens
+                tt = chat_completion.usage.total_tokens
+                return MockResponse(text, pt, ct, tt)
+            else:
+                response = genai_client.models.generate_content(
+                    model=config.LLM_MODEL,
+                    contents=prompt,
+                )
+                return response
+        except Exception as e:
+            if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e) or "rate limit" in str(e).lower():
+                wait = 10 * (attempt + 1)
+                print(f"    [rate limited] waiting {wait}s (attempt {attempt+1}/{max_retries})...")
+                time.sleep(wait)
+            else:
+                raise
+    raise Exception("Max retries exceeded for LLM call")
 
 
 def search(query, k=None, filters=None):
@@ -79,7 +122,7 @@ def answer(query, k=None, filters=None):
     prompt = build_prompt(query, chunks)
 
     llm_start = time.time()
-    response = llm.generate_content(prompt)
+    response = llm_generate(prompt)
     llm_time = time.time() - llm_start
 
     total_time = time.time() - start
