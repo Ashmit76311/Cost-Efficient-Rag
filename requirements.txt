@@ -1,0 +1,10 @@
+flask
+chromadb
+sentence-transformers
+google-generativeai
+PyPDF2
+beautifulsoup4
+python-dotenv
+langchain-text-splitters
+faiss-cpu
+numpy
