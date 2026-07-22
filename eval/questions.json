@@ -1,0 +1,227 @@
+[
+    {
+        "id": 1,
+        "question": "What are the main built-in data types in Python?",
+        "gold_answer": "Python's main built-in data types include integers, floats, strings, booleans, lists, tuples, dictionaries, and sets.",
+        "relevant_doc": "python_basics.md",
+        "relevant_keywords": ["data type", "integer", "float", "string", "boolean", "list", "tuple", "dictionary", "set"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 2,
+        "question": "What is a list comprehension in Python and how does it work?",
+        "gold_answer": "A list comprehension provides a concise way to create lists using the syntax [expression for item in iterable if condition]. They are generally faster than equivalent for-loops.",
+        "relevant_doc": "python_basics.md",
+        "relevant_keywords": ["list comprehension", "concise", "expression", "iterable"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 3,
+        "question": "How does a hash map handle collisions?",
+        "gold_answer": "Hash maps handle collisions using strategies like chaining (storing a linked list at each bucket) and open addressing (probing for the next empty slot using linear probing, quadratic probing, or double hashing).",
+        "relevant_doc": "data_structures.md",
+        "relevant_keywords": ["collision", "chaining", "open addressing", "probing"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 4,
+        "question": "What is the time complexity of binary search?",
+        "gold_answer": "Binary search has a time complexity of O(log n). It works by repeatedly halving the search space by comparing the target with the middle element.",
+        "relevant_doc": "algorithms.md",
+        "relevant_keywords": ["binary search", "O(log n)", "halving", "search space"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 5,
+        "question": "What is the difference between BFS and DFS?",
+        "gold_answer": "BFS (Breadth-First Search) explores nodes level by level using a queue and finds shortest paths in unweighted graphs. DFS (Depth-First Search) explores as deep as possible along each branch before backtracking using a stack or recursion, and is used for cycle detection and topological sorting.",
+        "relevant_doc": "algorithms.md",
+        "relevant_keywords": ["BFS", "DFS", "breadth", "depth", "queue", "stack"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 6,
+        "question": "What is supervised learning?",
+        "gold_answer": "Supervised learning uses labeled training data where each input has a corresponding target output. The model learns a mapping from inputs to outputs. It includes classification (predicting discrete labels) and regression (predicting continuous values).",
+        "relevant_doc": "machine_learning.md",
+        "relevant_keywords": ["supervised", "labeled", "classification", "regression"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 7,
+        "question": "Explain the bias-variance tradeoff in machine learning.",
+        "gold_answer": "Bias is error from overly simplistic assumptions (underfitting) while variance is error from sensitivity to training data fluctuations (overfitting). The goal is to minimize total error (bias^2 + variance + irreducible error) using techniques like cross-validation and regularization.",
+        "relevant_doc": "machine_learning.md",
+        "relevant_keywords": ["bias", "variance", "tradeoff", "underfitting", "overfitting"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 8,
+        "question": "What is backpropagation and how does it work?",
+        "gold_answer": "Backpropagation is the algorithm used to train neural networks. It computes the gradient of the loss function with respect to each weight using the chain rule, then updates weights to reduce the loss. It has a forward pass (computing predictions) and backward pass (computing gradients).",
+        "relevant_doc": "neural_networks.md",
+        "relevant_keywords": ["backpropagation", "gradient", "chain rule", "forward pass", "backward pass"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 9,
+        "question": "What are convolutional neural networks used for?",
+        "gold_answer": "CNNs are designed for processing grid-like data such as images. They use convolutional layers with learnable filters to detect features like edges, textures, and patterns, along with pooling layers to reduce spatial dimensions.",
+        "relevant_doc": "neural_networks.md",
+        "relevant_keywords": ["convolutional", "CNN", "image", "filter", "pooling"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 10,
+        "question": "What is database normalization?",
+        "gold_answer": "Database normalization is the process of organizing tables to reduce data redundancy and improve data integrity. It involves normal forms: 1NF (atomic values), 2NF (no partial dependencies), 3NF (no transitive dependencies), and BCNF.",
+        "relevant_doc": "databases.md",
+        "relevant_keywords": ["normalization", "redundancy", "normal form", "1NF", "2NF", "3NF"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 11,
+        "question": "Explain the ACID properties of database transactions.",
+        "gold_answer": "ACID stands for Atomicity (all-or-nothing transactions), Consistency (valid state transitions), Isolation (concurrent transactions appear sequential), and Durability (committed changes persist through failures).",
+        "relevant_doc": "databases.md",
+        "relevant_keywords": ["ACID", "atomicity", "consistency", "isolation", "durability"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 12,
+        "question": "What is the difference between a process and a thread?",
+        "gold_answer": "A process is an instance of a running program with its own memory space and resources, isolated from other processes. A thread is a lightweight unit of execution within a process that shares memory and resources with other threads, making inter-thread communication faster but requiring synchronization.",
+        "relevant_doc": "operating_systems.md",
+        "relevant_keywords": ["process", "thread", "memory space", "lightweight", "synchronization"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 13,
+        "question": "How does virtual memory work?",
+        "gold_answer": "Virtual memory allows processes to use more memory than physically available by using disk space as an extension of RAM. Each process has a virtual address space mapped to physical memory through page tables. The MMU handles address translation, and page faults occur when accessed pages aren't in physical memory.",
+        "relevant_doc": "operating_systems.md",
+        "relevant_keywords": ["virtual memory", "page table", "MMU", "page fault", "address"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 14,
+        "question": "What are the seven layers of the OSI model?",
+        "gold_answer": "The seven OSI layers are: Physical (raw bits), Data Link (framing, MAC), Network (IP, routing), Transport (TCP/UDP), Session (connection management), Presentation (encryption, compression), and Application (HTTP, DNS).",
+        "relevant_doc": "computer_networks.md",
+        "relevant_keywords": ["OSI", "physical", "data link", "network", "transport", "session", "presentation", "application"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 15,
+        "question": "What is the difference between TCP and UDP?",
+        "gold_answer": "TCP provides reliable, ordered, connection-oriented delivery with flow and congestion control, used for HTTP and file transfer. UDP is connectionless with no delivery guarantees, faster with lower overhead, used for DNS, streaming, and gaming.",
+        "relevant_doc": "computer_networks.md",
+        "relevant_keywords": ["TCP", "UDP", "reliable", "connectionless", "ordered"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 16,
+        "question": "What is a REST API?",
+        "gold_answer": "REST is an architectural style for web APIs. RESTful APIs use standard HTTP methods (GET, POST, PUT, DELETE) to perform CRUD operations on resources identified by URLs. They are stateless and typically use JSON format.",
+        "relevant_doc": "web_development.md",
+        "relevant_keywords": ["REST", "HTTP methods", "GET", "POST", "stateless", "CRUD"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 17,
+        "question": "What is gradient descent in neural networks?",
+        "gold_answer": "Gradient descent is part of the backpropagation process where weights are updated in the direction that reduces the loss function. The learning rate controls update size. Optimizers like Adam and SGD with momentum adaptively adjust learning rates.",
+        "relevant_doc": "neural_networks.md",
+        "relevant_keywords": ["gradient", "learning rate", "weight", "loss", "optimizer", "Adam"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 18,
+        "question": "What are design patterns in software engineering?",
+        "gold_answer": "Design patterns are reusable solutions to common software design problems. They are categorized into creational (Singleton, Factory), structural (Adapter, Decorator), and behavioral (Observer, Strategy) patterns.",
+        "relevant_doc": "software_engineering.md",
+        "relevant_keywords": ["design pattern", "creational", "structural", "behavioral", "singleton", "factory"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 19,
+        "question": "What is the purpose of unit testing?",
+        "gold_answer": "Unit testing tests individual functions or methods in isolation to ensure quality and correctness. Tests should be fast, independent, and repeatable, following the Arrange-Act-Assert pattern.",
+        "relevant_doc": "software_engineering.md",
+        "relevant_keywords": ["unit test", "isolation", "individual", "function", "method"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 20,
+        "question": "What is the difference between SQL and NoSQL databases?",
+        "gold_answer": "SQL databases use structured tables with ACID compliance and complex queries. NoSQL databases offer flexible schemas, horizontal scaling, and high write throughput, with types including document stores, key-value stores, column-family stores, and graph databases.",
+        "relevant_doc": "databases.md",
+        "relevant_keywords": ["SQL", "NoSQL", "document store", "key-value", "flexible schema"],
+        "type": "in_scope",
+        "filters": null
+    },
+    {
+        "id": 21,
+        "question": "How do I make chocolate chip cookies from scratch?",
+        "gold_answer": null,
+        "relevant_doc": null,
+        "relevant_keywords": [],
+        "type": "out_of_scope",
+        "filters": null
+    },
+    {
+        "id": 22,
+        "question": "Who won the FIFA World Cup in 2022?",
+        "gold_answer": null,
+        "relevant_doc": null,
+        "relevant_keywords": [],
+        "type": "out_of_scope",
+        "filters": null
+    },
+    {
+        "id": 23,
+        "question": "What is the capital city of Mongolia?",
+        "gold_answer": null,
+        "relevant_doc": null,
+        "relevant_keywords": [],
+        "type": "out_of_scope",
+        "filters": null
+    },
+    {
+        "id": 24,
+        "question": "According to the neural networks document, what is the vanishing gradient problem?",
+        "gold_answer": "The vanishing gradient problem occurs when gradients become extremely small as they propagate backward through many layers, effectively stopping learning in early layers. ReLU activation largely solved this for feedforward networks.",
+        "relevant_doc": "neural_networks.md",
+        "relevant_keywords": ["vanishing gradient", "extremely small", "ReLU"],
+        "type": "metadata_filter",
+        "filters": {"source": "neural_networks.md"}
+    },
+    {
+        "id": 25,
+        "question": "Based only on the databases document, what is indexing and why is it used?",
+        "gold_answer": "An index is a data structure that improves data retrieval speed at the cost of additional storage and slower writes. B-tree indexes support equality and range queries with O(log n) lookup. Over-indexing wastes storage and slows inserts.",
+        "relevant_doc": "databases.md",
+        "relevant_keywords": ["index", "B-tree", "retrieval", "lookup"],
+        "type": "metadata_filter",
+        "filters": {"source": "databases.md"}
+    }
+]
